@@ -34,6 +34,10 @@
             android:label="Register"
             android:parentActivityName=".MainActivity" />
         <activity
+            android:name=".SigninActivity"
+            android:label="Sign In"
+            android:parentActivityName=".MainActivity" />
+        <activity
             android:name=".signin"
             android:label="@string/title_activity_signin"
             android:parentActivityName=".MainActivity" />

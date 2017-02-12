@@ -5,10 +5,15 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
+
+import com.google.firebase.auth.FirebaseAuth;
 
 public class MainActivity extends AppCompatActivity {
 
+    private FirebaseAuth auth;
     Button but1,but2,but3;
+
     public void init()
     {
         but1 = (Button) findViewById(R.id.btnsignin);
@@ -39,10 +44,20 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
 
-        startActivity(new Intent(getApplicationContext(),register.class));
-        but3= (Button)findViewById(R.id.btnaccount);
+        auth = FirebaseAuth.getInstance();
+        if (auth.getCurrentUser() != null) {
+            // TO USE - IF SIGNED IN, SEND TO MAP ACTIVITY
+            //  startActivity(new Intent(MainActivity.this, MapsActivity.class));
+            //  finish();
+            Toast.makeText(MainActivity.this, "Signed in", Toast.LENGTH_LONG).show();
+        }
+
+
+        setContentView(R.layout.activity_main);
+        //IF NOT SIGNED IN SEND TO LOGIN REGISTER PAGE, IE MAIN ACTIVITY
+       // startActivity(new Intent(getApplicationContext(),SigninActivity.class));
+       // but3= (Button)findViewById(R.id.btnaccount);
        // init();
         //init2();
     }
