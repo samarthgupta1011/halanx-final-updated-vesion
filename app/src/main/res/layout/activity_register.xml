@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_register"
     android:layout_width="match_parent"
@@ -8,85 +8,63 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.halanx.halanx.register">
-    <LinearLayout
+    android:orientation="vertical"
+    tools:context="com.halanx.halanx.register"
+    android:weightSum="1">
+
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" >
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:inputType="textPersonName"
+            android:ems="8"
+            android:hint="First Name"
+            android:layout_marginEnd="20dp"
+            android:id="@+id/editText1"
+            />
+    </android.support.design.widget.TextInputLayout>
+
+   <RelativeLayout
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       >
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" >
+        <EditText
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:inputType="textPersonName"
+            android:ems="10"
+            android:hint="Last Name"
+            android:layout_marginEnd="30dp"
+            android:id="@+id/editText2"
+            android:layout_alignParentStart="true" />
+    </android.support.design.widget.TextInputLayout>
+   </RelativeLayout>
+
+
+    <android.support.design.widget.TextInputLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-    <TextView
-        android:text="First Name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/tvfirst"
-        android:textColor="@android:color/background_dark"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true" />
-
-    <TextView
-        android:text="Last Name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/tvlast"
-        android:textColor="@android:color/background_dark"
-        android:layout_marginEnd="57dp"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true" />
-
+        android:layout_height="wrap_content" >
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:inputType="textPersonName"
-        android:ems="10"
-        android:hint="FIRST NAME"
-        android:id="@+id/editText2"
-        android:layout_below="@+id/tvfirst"
+        android:inputType="textEmailAddress"
+        android:hint="Email"
+        android:layout_below="@+id/editText1"
         android:layout_alignParentStart="true"
-        />
+        android:id="@+id/editText4" />
+    </android.support.design.widget.TextInputLayout>
 
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="textPersonName"
-        android:ems="10"
-        android:hint="last name"
-        android:layout_below="@+id/tvlast"
-        android:id="@+id/editText3"
-        android:layout_alignBottom="@+id/editText2"
-        android:layout_alignStart="@+id/tvlast" />
 
-    <TextView
-        android:text="Email"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/tvemail"
-        android:layout_below="@+id/editText2"
-        android:layout_alignParentStart="true"
-        android:layout_alignEnd="@+id/editText2"
-        android:textColor="@android:color/black" />
 
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="textPersonName"
-        android:hint="EMAIL"
-        android:ems="10"
-        android:layout_below="@+id/tvemail"
-        android:layout_alignParentStart="true"
-        android:id="@+id/editText4"
-        android:layout_toStartOf="@+id/editText3" />
-
-    <TextView
-        android:text="Password"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignEnd="@+id/tvemail"
-        android:id="@+id/tvpassword"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/editText4"
-        android:textColor="@android:color/black" />
-
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -97,17 +75,12 @@
         android:layout_alignParentStart="true"
         android:id="@+id/editText5"
         android:layout_alignEnd="@+id/editText4" />
+    </android.support.design.widget.TextInputLayout>
 
-    <TextView
-        android:text="Mobile Number"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/editText5"
-        android:id="@+id/tvmobile"
-        android:layout_alignParentStart="true"
-        android:layout_alignEnd="@+id/editText5"
-        android:textColor="@android:color/black" />
 
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -118,17 +91,13 @@
         android:layout_alignParentStart="true"
         android:id="@+id/editText7"
         android:layout_alignEnd="@+id/tvmobile" />
+    </android.support.design.widget.TextInputLayout>
 
-    <TextView
-        android:text="City"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/editText7"
-        android:layout_alignParentStart="true"
-        android:id="@+id/tvcity"
-        android:layout_alignEnd="@+id/tvpassword"
-        android:textColor="@android:color/black" />
 
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -139,17 +108,13 @@
         android:layout_alignParentStart="true"
         android:id="@+id/editText8"
         android:layout_alignEnd="@+id/editText7" />
+    </android.support.design.widget.TextInputLayout>
 
-    <TextView
-        android:text="Invite Code"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/editText8"
-        android:layout_alignParentStart="true"
-        android:id="@+id/tvinvite"
-        android:layout_alignEnd="@+id/editText8"
-        android:textColor="@android:color/black" />
 
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -160,6 +125,9 @@
         android:layout_alignParentStart="true"
         android:id="@+id/editText9"
         android:layout_alignEnd="@+id/tvinvite" />
+    </android.support.design.widget.TextInputLayout>
+
+
 
     <TextView
         android:text="* Terms And Conditions Apply"
@@ -172,6 +140,7 @@
         android:layout_alignEnd="@+id/btncontinue"
         android:textColor="@android:color/black" />
 
+
     <Button
         android:text="Continue"
         android:layout_width="match_parent"
@@ -179,8 +148,7 @@
         android:id="@+id/btncontinue"
         android:background="@android:color/background_dark"
         android:textColor="@android:color/white"
-        android:layout_below="@+id/editText9"
         android:layout_centerHorizontal="true" />
-        </RelativeLayout>
-    </LinearLayout>
-</ScrollView>
+
+
+</LinearLayout>

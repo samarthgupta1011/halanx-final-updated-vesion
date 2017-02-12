@@ -11,7 +11,7 @@ public class register extends AppCompatActivity {
 
     public void init()
     {
-        but4 = (Button) findViewById(R.id.btncontinue);
+        but4 = (Button) findViewById(R.id.btn1);
         but4.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v)
@@ -26,7 +26,7 @@ public class register extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_register);
+        setContentView(R.layout.activity_register_new);
         init();
     }
 }
