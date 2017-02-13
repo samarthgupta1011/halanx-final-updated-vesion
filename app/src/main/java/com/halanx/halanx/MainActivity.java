@@ -45,13 +45,16 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        auth = FirebaseAuth.getInstance();
-        if (auth.getCurrentUser() != null) {
+     //   auth = FirebaseAuth.getInstance();
+      //  if (auth.getCurrentUser() != null) {
             // TO USE - IF SIGNED IN, SEND TO MAP ACTIVITY
             //  startActivity(new Intent(MainActivity.this, MapsActivity.class));
             //  finish();
-            Toast.makeText(MainActivity.this, "Signed in", Toast.LENGTH_LONG).show();
-        }
+        //    Toast.makeText(MainActivity.this, "Signed in", Toast.LENGTH_LONG).show();
+      //  }
+
+        startActivity(new Intent(MainActivity.this, RegisterActivity.class));
+        //  finish();
 
 
         setContentView(R.layout.activity_main);
