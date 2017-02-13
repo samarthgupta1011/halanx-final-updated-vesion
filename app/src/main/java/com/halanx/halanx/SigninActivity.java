@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -22,14 +23,14 @@ import com.google.firebase.auth.FirebaseAuth;
  * Created by samarthgupta on 12/02/17.
  */
 
-//To delete - signin. java and register xml old layout
 
 public class SigninActivity extends AppCompatActivity{
 
     private EditText inputEmail, inputPassword;
     private FirebaseAuth auth;
     private ProgressBar progressBar;
-    private Button btnSignup, btnLogin, btnReset;
+    private TextView tv1;
+    private Button btnLogin;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -37,16 +38,14 @@ public class SigninActivity extends AppCompatActivity{
 
 
         //Get Firebase auth instance
-        //THIS PART DONE IN MAINACTIVITY
         auth = FirebaseAuth.getInstance();
 
-      /*  if (auth.getCurrentUser() != null) {
-
+      if (auth.getCurrentUser() != null) {
             // TO USE
-          //  startActivity(new Intent(SigninActivity.this, MapsActivity.class));
-           // finish();
-            Toast.makeText(SigninActivity.this, "Signed in", Toast.LENGTH_LONG).show();
-        } */
+         // auth.signOut();
+           startActivity(new Intent(SigninActivity.this, MapsActivity.class));
+           finish();
+      }
 
         // set the view now
         setContentView(R.layout.activity_signin);
@@ -58,23 +57,8 @@ public class SigninActivity extends AppCompatActivity{
         inputPassword = (EditText) findViewById(R.id.password);
         progressBar = (ProgressBar) findViewById(R.id.login_progress);
         btnLogin = (Button) findViewById(R.id.email_sign_in_button);
-        //btnSignup = (Button) findViewById(R.id.btn_signup);
-        //btnReset = (Button) findViewById(R.id.btn_reset_password);
+        tv1=(TextView)findViewById(R.id.signUp);
 
-
-     /*   btnSignup.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(LoginActivity.this, SignupActivity.class));
-            }
-        });
-
-        btnReset.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(LoginActivity.this, ResetPasswordActivity.class));
-            }
-        }); */
 
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -113,10 +97,9 @@ public class SigninActivity extends AppCompatActivity{
                                     }
                                 } else {
                                     //TO USE - LOGIN COMPLETE
-                                   // /////Intent intent = new Intent(SigninActivity.this, MapsActivity.class);
-                                    Toast.makeText(SigninActivity.this, "GGOD", Toast.LENGTH_LONG).show();
-                                    //startActivity(intent);
-                                    //finish();
+                                    Intent intent = new Intent(SigninActivity.this, MapsActivity.class);
+                                    startActivity(intent);
+                                    finish();
                                 }
                             }
                         });
@@ -124,5 +107,11 @@ public class SigninActivity extends AppCompatActivity{
         });
 
 
+        tv1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(SigninActivity.this,RegisterActivity.class));
+            }
+        });
     }
 }

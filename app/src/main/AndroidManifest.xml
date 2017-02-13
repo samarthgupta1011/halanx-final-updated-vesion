@@ -23,11 +23,6 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".MainActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
             android:name=".RegisterActivity"
@@ -36,11 +31,14 @@
         <activity
             android:name=".SigninActivity"
             android:label="Sign In"
-            android:parentActivityName=".MainActivity" />
-        <activity
-            android:name=".signin"
-            android:label="@string/title_activity_signin"
-            android:parentActivityName=".MainActivity" />
+            android:parentActivityName=".MainActivity">
+        <intent-filter>
+            <action android:name="android.intent.action.MAIN" />
+
+            <category android:name="android.intent.category.LAUNCHER" />
+        </intent-filter>/>
+        </activity>
+
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -66,8 +64,6 @@
         <activity
             android:name=".popup_feedback"
             android:theme="@style/AppTheme.mytheme" />
-        <activity android:name=".account_fragment"
-            android:theme="@style/AppTheme.mytheme2"/>
         <activity
             android:name=".MapsActivity2"
             android:label="@string/title_activity_maps2">

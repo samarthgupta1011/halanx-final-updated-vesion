@@ -56,21 +56,6 @@ public class RegisterActivity extends AppCompatActivity {
             inputicode = (EditText)findViewById(R.id.editText9);
 
 
-
-           /* btnResetPassword.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    startActivity(new Intent(SignupActivity.this, ResetPasswordActivity.class));
-                }
-            });
-
-            btnSignIn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    finish();
-                }
-            }); */
-
             btnRegister.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -137,9 +122,8 @@ public class RegisterActivity extends AppCompatActivity {
 
                                         UserInfo userInfo = new UserInfo(email,password,fname,lname,mno,city,icode);
                                         ref.child("Users").child(user.getUid()).setValue(userInfo);
-
-                                        //startActivity(new Intent(RegisterActivity.this, SigninActivity.class));
-                                        //finish();
+                                        startActivity(new Intent(RegisterActivity.this, SigninActivity.class));
+                                        finish();
                                     }
                                 }
                             });
@@ -148,11 +132,11 @@ public class RegisterActivity extends AppCompatActivity {
             });
     }
 
-    //@Override
-    //protected void onResume() {
-    //    super.onResume();
+    @Override
+    protected void onResume() {
+        super.onResume();
         //progressBar.setVisibility(View.GONE);
-    //}
+    }
 
 
 }
