@@ -1,79 +1,95 @@
 package com.halanx.halanx;
 
-import android.*;
-import android.Manifest;
-import android.content.Context;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.os.Build;
-import android.support.v4.app.FragmentActivity;
+import android.location.Location;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.os.Bundle;
-import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ProgressBar;
+import android.widget.Toast;
 
-
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationListener;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
-    private GoogleMap mMap;
-    Button but1,but2,but3;
-    public void init() {
-        but1 = (Button) findViewById(R.id.btnrating);
-        but1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent toy = new Intent(MapsActivity.this, rating.class);
-                startActivity(toy);
 
-            }
-        });
 
-    }
-    public void init2()
-    {
-        but2 = (Button) findViewById(R.id.btnaccount);
-        but2.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v) {
-                Intent toy1 = new Intent(MapsActivity.this, Account.class);
-                startActivity(toy1);
-            }});
 
-    }
-    public void init3()
-    {
-        but3=(Button)findViewById(R.id.btnearning);
-        but3.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v) {
-                Intent toy2=new Intent(MapsActivity.this,earning.class);
-                startActivity(toy2);
-            }
-        }
-        );
-    }
+public class MapsActivity extends AppCompatActivity implements
+        OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
+
+    LocationRequest mLocationRequest;
+    GoogleApiClient mGoogleApiClient;
+
+    LatLng latLng, n;
+    GoogleMap mGoogleMap;
+    SupportMapFragment mFragment;
+    Marker currLocationMarker, nmarker;
+
+    Button bt1;
+    ProgressBar pb1;
+
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map);
-        mapFragment.getMapAsync(this);
-        init();
-        init2();
-        init3();
-    }
 
+        final ProgressDialog pd1 = new ProgressDialog(this);
+        bt1 = (Button)findViewById(R.id.on_off);
+        pb1=(ProgressBar)findViewById(R.id.progressBar);
+        pb1.setVisibility(View.INVISIBLE);
+
+        pd1.hide();
+
+        mFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
+
+
+        bt1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                  String status = bt1.getText().toString();
+                if(status.equals("GO ONLINE")) {
+
+                    mFragment.getMapAsync(MapsActivity.this);
+                    pb1.setVisibility(View.VISIBLE);
+                    bt1.setVisibility(View.INVISIBLE); }
+
+                else {
+                    //When going offline from online
+                    bt1.setBackgroundResource(R.color.green);
+                    bt1.setText("GO ONLINE");
+                    stopLocation();
+
+                }
+            }
+        });
+
+
+
+    }
 
 
     /**
@@ -85,20 +101,145 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
      * it inside the SupportMapFragment. This method will only be triggered once the user has
      * installed Google Play services and returned to the app.
      */
-    @Override
-    public void onMapReady(GoogleMap googleMap) {
-        mMap = googleMap;
 
-        // initialise google play services
-        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (ContextCompat.checkSelfPermission(this,
-                    android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-                mMap.setMyLocationEnabled(true);
+
+
+        @Override
+        public void onMapReady (GoogleMap googleMap){
+            mGoogleMap = googleMap;
+
+            // Add a marker in Sydney and move the camera
+            if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                // TODO: Consider calling
+                //    ActivityCompat#requestPermissions
+                // here to request the missing permissions, and then overriding
+                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                //                                          int[] grantResults)
+                // to handle the case where the user grants the permission. See the documentation
+                // for ActivityCompat#requestPermissions for more details.
+                return;
             }
-        } else {
-            mMap.setMyLocationEnabled(true);
+            mGoogleMap.setMyLocationEnabled(true);
+
+            buildGoogleApiClient();
+
+            mGoogleApiClient.connect();
+        }
+
+    private void buildGoogleApiClient() {
+        Toast.makeText(this, "buildGoogleApiClient", Toast.LENGTH_SHORT).show();
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .addApi(LocationServices.API)
+                .build();
+    }
+
+    @Override
+    public void onConnected(@Nullable Bundle bundle) {
+
+
+        //For button
+        pb1.setVisibility(View.INVISIBLE);
+        bt1.setBackgroundResource(R.color.red);
+        bt1.setVisibility(View.VISIBLE);
+        bt1.setText("GO OFFLINE");
+
+        Toast.makeText(this, "onConnected", Toast.LENGTH_SHORT).show();
+        Location mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+        if (mLastLocation != null) {
+            //place marker at current position
+            //mGoogleMap.clear();
+            latLng = new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude());
+            MarkerOptions markerOptions = new MarkerOptions();
+            markerOptions.position(latLng);
+            markerOptions.title("Current Position");
+            markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA));
+            currLocationMarker = mGoogleMap.addMarker(markerOptions);
+
+
+            n= new LatLng(28.704059,77.102490);
+            MarkerOptions options = new MarkerOptions();
+            options.position(n).title("My place").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
+            nmarker = mGoogleMap.addMarker(options);
+
+
 
         }
+
+        mLocationRequest = new LocationRequest();
+        mLocationRequest.setInterval(5000); //10 seconds
+        mLocationRequest.setFastestInterval(3000); //3 seconds
+        mLocationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
+        //mLocationRequest.setSmallestDisplacement(0.1F); //1/10 meter
+
+        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+        LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
+
+
     }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+        Toast.makeText(this, "onConnectionSuspended", Toast.LENGTH_SHORT).show();
+
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+        Toast.makeText(this, "onConnectionFailed", Toast.LENGTH_SHORT).show();
+
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+        //place marker at current position
+        //mGoogleMap.clear();
+        if (currLocationMarker != null) {
+            currLocationMarker.remove();
+        }
+        latLng = new LatLng(location.getLatitude(), location.getLongitude());
+        MarkerOptions markerOptions = new MarkerOptions();
+        markerOptions.position(latLng);
+        markerOptions.title("Current Position");
+        markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA));
+        currLocationMarker = mGoogleMap.addMarker(markerOptions); //Adding marker to the map
+
+        Toast.makeText(this, "Location Changed", Toast.LENGTH_SHORT).show();
+
+        //zoom to current position:
+        CameraPosition cameraPosition = new CameraPosition.Builder()
+                .target(latLng).zoom(14).build();
+
+        mGoogleMap.animateCamera(CameraUpdateFactory
+                .newCameraPosition(cameraPosition));
+
+        //If you only need one location, unregister the listener
+        //LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
+
+    }
+
+    private void stopLocation() {
+        LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
+
+        Toast.makeText(getApplicationContext(),"You are offline",Toast.LENGTH_LONG).show();
+        startActivity(new Intent(MapsActivity.this,MapsActivity.class));
+        finish();
+    }
+
+
+
 }
+
+
+
 

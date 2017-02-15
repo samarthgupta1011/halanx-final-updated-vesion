@@ -121,7 +121,7 @@ public class RegisterActivity extends AppCompatActivity {
                                     } else {
 
                                         UserInfo userInfo = new UserInfo(email,password,fname,lname,mno,city,icode);
-                                        ref.child("Users").child(user.getUid()).setValue(userInfo);
+                                        ref.child("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(userInfo);
                                         startActivity(new Intent(RegisterActivity.this, SigninActivity.class));
                                         finish();
                                     }
